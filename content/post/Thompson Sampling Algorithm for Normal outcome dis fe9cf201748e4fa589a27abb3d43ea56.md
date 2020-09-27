@@ -1,10 +1,24 @@
-# Thompson Sampling Algorithm for Normal outcome distribution
+---
+title: Thompson Sampling Algorithm for Normal outcome distribution
+
+# View.
+#   1 = List
+#   2 = Compact
+#   3 = Card
+view: 2
+
+# Optional header image (relative to `static/media/` folder).
+header:
+  caption: ""
+  image: ""
+---
+
 
 By: Sandeep Gangarapu
 Created time: Sep 10, 2020 9:46 PM
 Tags: MAB
 
-Thompson Sampling is one of the most popular Multi-Armed bandit (MAB) algorithms - the main reason being its explainability (imagine explaining upper confidence bound to your manager) and decent performance in practice [1]. 
+Thompson Sampling is one of the most popular Multi-Armed bandit (MAB) algorithms - the main reason being its explainability (imagine explaining upper confidence bound to your manager) and decent performance in practice [1].
 
 Many blog posts on the Internet show how to implement Thompson sampling ([here](https://visualstudiomagazine.com/articles/2019/06/01/thompson-sampling.aspx), [here](https://towardsdatascience.com/hompson-sampling-for-multi-armed-bandit-problems-part-1-b750cbbdad34), [here](https://peterroelants.github.io/posts/multi-armed-bandit-implementation/) and [here](https://medium.com/analytics-vidhya/multi-armed-bandit-analysis-of-thompson-sampling-algorithm-6375271f40d1)). Almost all of them consider Bernoulli outcome distribution (e.g. click or no click, purchase, or no purchase) and use the Beta-Bernoulli Bayesian update procedure for simulations and usually compare the performance (Regret) to other MAB algorithms like UCB or sometimes to A/B testing. However, none of them consider Gaussian outcome distribution and especially the case when both mean and variance of the distributions are unknown (which is usually the case when you are conducting an experiment where the outcome is continuous, ex: dollars spent, time spent, etc.).
 
@@ -16,30 +30,30 @@ Before we get into the actual Thompson Sampling Algorithm, we need to understand
 
 In this specific case, we assume that $\sigma^2$ follows inverse-gamma distribution and $\mu$ follows Normal distribution. To make the math easy, we use $\tau = \frac{1}{\sigma^2}$ instead of  $\sigma^2$ from now on ($\tau$ is called precision). If $\sigma^2$ follows an Inverse-Gamma distribution, then  $\tau = \frac{1}{\sigma^2}$ follows a Gamma distribution.
 
-$$\begin{gathered}
+$$
 \tau \sim Ga(\alpha_0, \beta_0) \\
 \mu |\tau \sim N(\mu_0, n_0\tau) \\
 x |\mu, \tau \sim N(\mu, \tau)
-\end{gathered}$$
+$$
 
 We initialize four parameters $\alpha_0, \beta_0, \mu_0$, $n_0$(can be 1), draw $\tau$ from $Ga(\alpha_0, \beta_0)$ , use this value of $\tau$ to draw $\mu$ from $N(\mu_0, n_0\tau)$, observe an outcome given out by the actual process (which we assume is drawn from the true distribution - the mean and variance of which we are trying to estimate), and update the four parameters using this outcome value to get the posterior. The update procedure is below. Note that this will work for either a single outcome drawn or a bunch of outcomes drawn at the same time.
 
-$$\begin{gathered}
+$$
 \alpha = \alpha_0 + \frac{n}{2} \\
 \beta = \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2} \\
 n = n_0 + n \\
 \mu = \frac{n}{n+n_o}\bar{x} + \frac{n_0}{n+n_o}\mu_0 \\
 
-\end{gathered}$$
+$$
 
 Note that this updation procedure will work for single outcome or a bunch of outcomes. When there is a single outcome, $\alpha = \alpha_0 + 1/2$ , $n = n_0 + 1$, $\bar{x} = x_i$
 
 Once the updation is done, the posteriors follow the following distributions
 
-$$\begin{gathered}
+$$
 \mu |\tau, x \sim N(\frac{n}{n+n_0}\bar{x} + \frac{n_0}{n+n_0}\mu_0 , n\tau + n_0\tau) \\
 \tau | \mu, x \sim Ga(\alpha_0 + \frac{n}{2} , \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2})
-\end{gathered}$$
+$$
 
 This Bayesian update procedure follows the basis for the Thompson Sampling algorithm to follow.
 
@@ -50,7 +64,7 @@ Let's consider there are K arms (treatment groups/variants/choices etc.) availab
 **Algorithm:**
 1. Pull each arm twice
 2. For each arm $i$, initialize prior params ($\alpha_{0i} = 0.5, \beta_{0i} = 0.5, \mu_{0i}=\bar{x_i}, n_{0i}=2$ ).
-3. At each time-step $t$ until $T$ 
+3. At each time-step $t$ until $T$
      1. For each arm $i$,  draw $\tau_i \sim Ga(\alpha_i, \beta_i)$ and  $\mu_i  \sim N(\mu_i, n_i\tau_i)$
      2. For each arm $i$,  draw $x_i \sim N(\mu_i, \tau_i)$
      3. Pull the arm with maximum value of $x_i$ and observe $\mathtt{x}$
@@ -62,7 +76,7 @@ This is the procedure for the Thompson sampling algorithm when the outcome distr
 
 ### Comparison to UCB and A/B Testing
 
-Upper confidence bound (UCB) is one of the most popular and efficient MAB algorithms. It is only just to compare Thompson Sampling's performance to it. Though A/B testing is generally used for Inference and not with an objective to minimize regret, there is growing literature to bridge this gap [2, 3]. So, bench-marking against A/B testing puts efficiency gains of MAB's into perspective. 
+Upper confidence bound (UCB) is one of the most popular and efficient MAB algorithms. It is only just to compare Thompson Sampling's performance to it. Though A/B testing is generally used for Inference and not with an objective to minimize regret, there is growing literature to bridge this gap [2, 3]. So, bench-marking against A/B testing puts efficiency gains of MAB's into perspective.
 
 In this simulation, we consider 5 arms with different means and variances (we don't know these values, but the simulation does). Let's consider a time period of 2000 (We can only pull the arms 2000 times).
 
@@ -71,7 +85,7 @@ true_means = c(0.25, 1.82, 1.48, 2.25, 2)
 true_vars = c(2.84,  1.97, 2.62, 1, 2.06)
 ```
 
-As per the above distributions, arm 0 has the least mean and arm 3 has the highest mean. So a good MAB algorithm will pull arm 3 most of the time and pull arm 0 very rarely. A/B testing pulls all arms uniformly until it can detect the least effect size (I know we cannot know this beforehand and we need to do power analysis, etc., but let's cheat a little). After that, it will only pull the arm with a statistically significant highest mean. We simulate all three algorithms and pull arms based on what the algorithm suggests. 
+As per the above distributions, arm 0 has the least mean and arm 3 has the highest mean. So a good MAB algorithm will pull arm 3 most of the time and pull arm 0 very rarely. A/B testing pulls all arms uniformly until it can detect the least effect size (I know we cannot know this beforehand and we need to do power analysis, etc., but let's cheat a little). After that, it will only pull the arm with a statistically significant highest mean. We simulate all three algorithms and pull arms based on what the algorithm suggests.
 
 ![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/grp.png](Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/grp.png)
 
