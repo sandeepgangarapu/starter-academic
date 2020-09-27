@@ -6,17 +6,12 @@ title: Thompson Sampling Algorithm for Normal outcome distribution
 #   2 = Compact
 #   3 = Card
 view: 2
-
+date: 2020-09-27T01:42:41+00:00
 # Optional header image (relative to `static/media/` folder).
 header:
   caption: ""
   image: ""
 ---
-
-
-By: Sandeep Gangarapu
-Created time: Sep 10, 2020 9:46 PM
-Tags: MAB
 
 Thompson Sampling is one of the most popular Multi-Armed bandit (MAB) algorithms - the main reason being its explainability (imagine explaining upper confidence bound to your manager) and decent performance in practice [1].
 
@@ -26,40 +21,37 @@ In this post, I address this gap and also compare Thompson Sampling's performanc
 
 ### Bayesian Update procedure for Normal-Inverse Gamma prior
 
-Before we get into the actual Thompson Sampling Algorithm, we need to understand how to estimate parameters of a normal distribution. Let's consider a random process where outcomes $x_i$ are drawn from $\N(\mu, \sigma^2)$ where $\mu, \sigma^2$ are unknown. As we do not know both these parameters, like a true Bayesian, we put a prior on both. We then keep updating these priors using the Bayes rule as we see more and more data and use the final posterior as the best available approximation for the parameters we are interested in. We could choose any prior distributions for these parameters based on our beliefs of what they could be, but to make our life easier, we choose conjugate priors to get a closed-form analytical solution for the bayesian update procedure.
+Before we get into the actual Thompson Sampling Algorithm, we need to understand how to estimate parameters of a normal distribution. Let's consider a random process where outcomes $x_i$ are drawn from $\mathcal{N}(\mu, \sigma^2)$ where $\mu, \sigma^2$ are unknown. As we do not know both these parameters, like a true Bayesian, we put a prior on both. We then keep updating these priors using the Bayes rule as we see more and more data and use the final posterior as the best available approximation for the parameters we are interested in. We could choose any prior distributions for these parameters based on our beliefs of what they could be, but to make our life easier, we choose conjugate priors to get a closed-form analytical solution for the bayesian update procedure.
 
 In this specific case, we assume that $\sigma^2$ follows inverse-gamma distribution and $\mu$ follows Normal distribution. To make the math easy, we use $\tau = \frac{1}{\sigma^2}$ instead of  $\sigma^2$ from now on ($\tau$ is called precision). If $\sigma^2$ follows an Inverse-Gamma distribution, then  $\tau = \frac{1}{\sigma^2}$ follows a Gamma distribution.
 
 $$
-\tau \sim Ga(\alpha_0, \beta_0) \\
-\mu |\tau \sim N(\mu_0, n_0\tau) \\
-x |\mu, \tau \sim N(\mu, \tau)
+\tau \sim Ga(\alpha_0, \beta_0) $$
+$$\mu |\tau \sim N(\mu_0, n_0\tau) $$
+$$x |\mu, \tau \sim N(\mu, \tau)
 $$
 
 We initialize four parameters $\alpha_0, \beta_0, \mu_0$, $n_0$(can be 1), draw $\tau$ from $Ga(\alpha_0, \beta_0)$ , use this value of $\tau$ to draw $\mu$ from $N(\mu_0, n_0\tau)$, observe an outcome given out by the actual process (which we assume is drawn from the true distribution - the mean and variance of which we are trying to estimate), and update the four parameters using this outcome value to get the posterior. The update procedure is below. Note that this will work for either a single outcome drawn or a bunch of outcomes drawn at the same time.
 
 $$
-\alpha = \alpha_0 + \frac{n}{2} \\
-\beta = \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2} \\
-n = n_0 + n \\
-\mu = \frac{n}{n+n_o}\bar{x} + \frac{n_0}{n+n_o}\mu_0 \\
-
-$$
+\alpha = \alpha_0 + \frac{n}{2} $$
+$$\beta = \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2} $$
+$$n = n_0 + n $$
+$$\mu = \frac{n}{n+n_o}\bar{x} + \frac{n_0}{n+n_o}\mu_0 $$
 
 Note that this updation procedure will work for single outcome or a bunch of outcomes. When there is a single outcome, $\alpha = \alpha_0 + 1/2$ , $n = n_0 + 1$, $\bar{x} = x_i$
 
 Once the updation is done, the posteriors follow the following distributions
 
 $$
-\mu |\tau, x \sim N(\frac{n}{n+n_0}\bar{x} + \frac{n_0}{n+n_0}\mu_0 , n\tau + n_0\tau) \\
-\tau | \mu, x \sim Ga(\alpha_0 + \frac{n}{2} , \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2})
-$$
+\mu |\tau, x \sim N(\frac{n}{n+n_0}\bar{x} + \frac{n_0}{n+n_0}\mu_0 , n\tau + n_0\tau) $$
+$$ \tau | \mu, x \sim Ga(\alpha_0 + \frac{n}{2} , \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2})$$
 
 This Bayesian update procedure follows the basis for the Thompson Sampling algorithm to follow.
 
 ### Thompson Sampling
 
-Let's consider there are K arms (treatment groups/variants/choices etc.) available and the outcomes $x_i$ of arm $i$ are drawn from $\N(\mu_i, \sigma_i^2)$ where $\mu_i, \sigma_i^2$ are unknown. The time horizon is $T$. If we knew these parameters, we would pull the arm with the highest mean $T$ times and maximize the expected total output. Because we do not know the parameters, the idea is to find a procedure to pull the arms in such a way so that we have a good understanding of what the true means are without pulling the arms with a low mean a lot of times (minimize the regret).
+Let's consider there are K arms (treatment groups/variants/choices etc.) available and the outcomes $x_i$ of arm $i$ are drawn from $\mathcal{N}(\mu_i, \sigma_i^2)$ where $\mu_i, \sigma_i^2$ are unknown. The time horizon is $T$. If we knew these parameters, we would pull the arm with the highest mean $T$ times and maximize the expected total output. Because we do not know the parameters, the idea is to find a procedure to pull the arms in such a way so that we have a good understanding of what the true means are without pulling the arms with a low mean a lot of times (minimize the regret).
 
 **Algorithm:**
 1. Pull each arm twice
