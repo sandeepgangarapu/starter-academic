@@ -14,7 +14,7 @@ role: Doctoral Candidate
 
 # Organizations/Affiliations
 organizations:
-- name: Stanford University
+- name: University of Minnesota
   url: ""
 
 # Short bio (displayed in user profile at end of posts)
