@@ -18,7 +18,7 @@ organizations:
   url: ""
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: I am a fifth year Doctoral Candidate. My research is at the intersection of Causal Inference and Machine Learning.
 
 interests:
 - Artificial Intelligence
@@ -47,13 +47,13 @@ social:
   link: '#contact'  # For a direct email link, use "mailto:test@example.org".
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/GeorgeCushen
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
+  link: https://twitter.com/sandyrt
+#- icon: google-scholar
+#  icon_pack: ai
+#  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
 - icon: github
   icon_pack: fab
-  link: https://github.com/gcushen
+  link: https://github.com/sandeepgangarapu
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -61,15 +61,21 @@ social:
 #   link: files/cv.pdf
 
 # Enter email to display Gravatar (if Gravatar enabled in Config)
-email: ""
+#email: ""
 
 # Organizational groups that you belong to (for People widget)
 #   Set this to `[]` or comment out if you are not using People widget.
-user_groups:
-- Researchers
-- Visitors
+#user_groups:
+#- Researchers
+#- Visitors
 ---
 
-Nelson Bighetti is a professor of artificial intelligence at the Stanford AI Lab. His research interests include distributed robotics, mobile computing and programmable matter. He leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+I am a fifth-year Doctoral Candidate studying Information and Decision Sciences at Carlson School of Management, University of Minnesota. I am from [Kalyanadurgam](https://goo.gl/maps/CJgEUE9FbMT2), a town in Anantapur district of Andhra Pradesh, India.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+I develop methods and frameworks that help decision-makers (Marketers, Clinicians, or Policy-makers) better conduct Randomized Controlled Trials (A/B testing) and also optimally target subjects and treatments in a budget-constrained, heterogeneous treatment effect environment. These questions fall in the line of literature related to Heterogeneous Treatment effects and Multi-Armed Bandits. I use a mix of Statistics, Machine Learning, and Causal Inference to solve the above problems.
+
+Before moving to Minneapolis, I worked at Google as an Automation Specialist in the Google Search Anti-Abuse team developing scalable solutions to fight abuse on Google Search. Before that, I completed Masters’ and Bachelors’ in Aerospace Engineering with a specialization in Computational Fluid Dynamics from the Indian Institute of Technology, Kharagpur.
+
+While I am not doing research or grading assignments, I am either running or riding my [onewheel](https://www.youtube.com/watch?v=XNqOU4jx62I).
+
+You can find more of my activity below.
