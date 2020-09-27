@@ -38,9 +38,9 @@ $$
 $$\beta = \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2} $$
 $$n = n_0 + n $$
 $$\mu = \frac{n}{n+n_o}\bar{x} + \frac{n_0}{n+n_o}\mu_0 $$
-
+{{% callout note %}}
 Note that this updation procedure will work for single outcome or a bunch of outcomes. When there is a single outcome, $\alpha = \alpha_0 + 1/2$ , $n = n_0 + 1$, $\bar{x} = x_i$
-
+{{% /callout %}}
 Once the updation is done, the posteriors follow the following distributions
 
 $$
@@ -61,8 +61,9 @@ Let's consider there are K arms (treatment groups/variants/choices etc.) availab
      2. For each arm $i$,  draw $x_i \sim N(\mu_i, \tau_i)$
      3. Pull the arm with maximum value of $x_i$ and observe $\mathtt{x}$
      4. Update the priors of the pulled arm using the Bayesian update procedure.
-
+{{% callout note %}}
 The Choice of priors for alpha and beta is a blog post altogether and I would not delve into it in this post.
+{{% /callout %}}
 
 This is the procedure for the Thompson sampling algorithm when the outcome distribution is Gaussian and both means and variances are unknown. You can refer to the actual python **code [here](https://github.com/sandeepgangarapu/code_for_the_blog/blob/master/thompson_sampling.py)**, however, it has a bunch of unknown classes that I use as part of my MAB framework. But, the core functionality is still there and you can still replicate it with minor changes and use it in your projects.
 
@@ -79,19 +80,19 @@ true_vars = c(2.84,  1.97, 2.62, 1, 2.06)
 
 As per the above distributions, arm 0 has the least mean and arm 3 has the highest mean. So a good MAB algorithm will pull arm 3 most of the time and pull arm 0 very rarely. A/B testing pulls all arms uniformly until it can detect the least effect size (I know we cannot know this beforehand and we need to do power analysis, etc., but let's cheat a little). After that, it will only pull the arm with a statistically significant highest mean. We simulate all three algorithms and pull arms based on what the algorithm suggests.
 
-![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/grp.png](Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/grp.png)
+![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/grp.png](grp.png)
 
 Fig 1 : Arms pulled at different time periods for various algorithms
 
 This figure shows which arm was pulled at different time periods for different algorithms. As you can see A/B Testing could never be completed as the arm pulls were exhausted before it can statistically distinguish the difference between all the arms. Thompson Sampling and UCB we accurately able to identify very quickly that arm 3 is the best and pull it the most. Both performed the best and we need a regret graph to accurately identify which algorithm performed the best.
 
-![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_2.png](Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_2.png)
+![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_2.png](reg_2.png)
 
 Figure 2: Regret growth over time for Thompson Sampling and UCB
 
 The regret graph shows that Thompson Sampling performed better than UCB as it was able to decide on the best arm faster than UCB. This is for one simulation and difference seeds might yield different values, but, the overall theme is the same. Also, in this case, the difference is not significant enough to decide one algorithm is better than the other (MAB theory suggests that regret is not just a function of the algorithm but also mean differences between all arms)
 
-![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_3.png](Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_3.png)
+![Thompson%20Sampling%20Algorithm%20for%20Normal%20outcome%20dis%20fe9cf201748e4fa589a27abb3d43ea56/reg_3.png](reg_3.png)
 
 Figure 3: Regret growth over time for A/B Testing, Thompson Sampling and UCB
 
