@@ -86,7 +86,7 @@ Fig 1 : Arms pulled at different time periods for various algorithms
 
 This figure shows which arm was pulled at different time periods for different algorithms. As you can see A/B Testing could never be completed as the arm pulls were exhausted before it can statistically distinguish the difference between all the arms. Thompson Sampling and UCB we accurately able to identify very quickly that arm 3 is the best and pull it the most. Both performed the best and we need a regret graph to accurately identify which algorithm performed the best.
 
-{{< figure src="reg_2.png" title="A caption" >}}
+{{< figure library="true" src="reg_2.png" title="A caption" >}}
 
 Figure 2: Regret growth over time for Thompson Sampling and UCB
 
