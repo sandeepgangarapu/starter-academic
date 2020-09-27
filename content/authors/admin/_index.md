@@ -20,12 +20,12 @@ organizations:
 # Short bio (displayed in user profile at end of posts)
 bio: I am a fifth year Doctoral Candidate. My research is at the intersection of Causal Inference and Machine Learning.
 
-<!-- interests:
-- Artificial Intelligence
-- Computational Linguistics
-- Information Retrieval
+interests:[]
+#- Artificial Intelligence
+#- Computational Linguistics
+#- Information Retrieval
 
-education: -->
+education:
   <!-- courses:
   - course: PhD in Artificial Intelligence
     institution: Stanford University
