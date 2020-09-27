@@ -38,9 +38,11 @@ $$
 $$\beta = \beta_0 + \frac{1}{2}\sum(x_i - \bar{x})^2 + \frac{nn_0}{2(n+n_0)(\bar{x}-\mu_0)^2} $$
 $$n = n_0 + n $$
 $$\mu = \frac{n}{n+n_o}\bar{x} + \frac{n_0}{n+n_o}\mu_0 $$
+
 {{% callout note %}}
 Note that this updation procedure will work for single outcome or a bunch of outcomes. When there is a single outcome, $\alpha = \alpha_0 + 1/2$ , $n = n_0 + 1$, $\bar{x} = x_i$
 {{% /callout %}}
+
 Once the updation is done, the posteriors follow the following distributions
 
 $$
@@ -61,9 +63,11 @@ Let's consider there are K arms (treatment groups/variants/choices etc.) availab
      2. For each arm $i$,  draw $x_i \sim N(\mu_i, \tau_i)$
      3. Pull the arm with maximum value of $x_i$ and observe $\mathtt{x}$
      4. Update the priors of the pulled arm using the Bayesian update procedure.
+
 {{% callout note %}}
 The Choice of priors for alpha and beta is a blog post altogether and I would not delve into it in this post.
 {{% /callout %}}
+
 
 This is the procedure for the Thompson sampling algorithm when the outcome distribution is Gaussian and both means and variances are unknown. You can refer to the actual python **code [here](https://github.com/sandeepgangarapu/code_for_the_blog/blob/master/thompson_sampling.py)**, however, it has a bunch of unknown classes that I use as part of my MAB framework. But, the core functionality is still there and you can still replicate it with minor changes and use it in your projects.
 
