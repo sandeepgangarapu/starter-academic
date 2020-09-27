@@ -1,0 +1,12 @@
+# Font style metadata
+name = "custom"
+
+# Optional Google font URL
+google_fonts = "Crimson+Text"
+
+# Font families
+
+heading_font = "Crimson Text"
+body_font = "Crimson Text"
+nav_font = "Crimson Text"
+mono_font = "Crimson Text"
