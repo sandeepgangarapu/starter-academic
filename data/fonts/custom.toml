@@ -2,11 +2,11 @@
 name = "custom"
 
 # Optional Google font URL
-google_fonts = "Crimson+Text"
+google_fonts = "Rubik"
 
 # Font families
 
-heading_font = "Crimson Text"
-body_font = "Crimson Text"
-nav_font = "Crimson Text"
-mono_font = "Crimson Text"
+heading_font = "Rubik"
+body_font = "Rubik"
+nav_font = "Rubik"
+mono_font = "Rubik"
